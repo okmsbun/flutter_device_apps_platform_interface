@@ -1,6 +1,6 @@
 name: flutter_device_apps_platform_interface
 description: Platform-agnostic API contract for flutter_device_apps (federated).
-version: 0.1.0
+version: 0.1.1
 repository: https://github.com/okmsbun/flutter_device_apps
 issue_tracker: https://github.com/okmsbun/flutter_device_apps/issues
 topics:
@@ -16,4 +16,4 @@ dependencies:
   plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
-  lints: ^5.0.0
+  lints: ^6.0.0
