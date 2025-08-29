@@ -142,6 +142,12 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Call this method to stop receiving app change events and clean up resources.
   /// Platform implementations should remove listeners or unregister broadcast receivers.
   Future<void> stopAppChangeStream() async {}
+
+  /// Opens the app settings for the specified package name.
+  ///
+  /// Platform implementations should open the app settings page for the given package.
+  /// Returns true if the settings page was successfully opened, false otherwise.
+  Future<bool> openAppSettings(String packageName);
 }
 
 /// Default no-op implementation to throw if no platform is registered.
@@ -174,5 +180,9 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
 
   @override
   Future<void> stopAppChangeStream() =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<bool> openAppSettings(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 }
