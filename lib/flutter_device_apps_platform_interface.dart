@@ -154,6 +154,12 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Platform implementations should uninstall the app with the given package name.
   /// Returns true if the app was successfully uninstalled, false otherwise.
   Future<bool> uninstallApp(String packageName);
+
+  /// Gets the installer store for the specified package name.
+  ///
+  /// Platform implementations should return the installer store for the given package.
+  /// Returns the installer store name or null if not available.
+  Future<String?> getInstallerStore(String packageName);
 }
 
 /// Default no-op implementation to throw if no platform is registered.
@@ -194,5 +200,9 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
 
   @override
   Future<bool> uninstallApp(String packageName) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<String?> getInstallerStore(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 }
