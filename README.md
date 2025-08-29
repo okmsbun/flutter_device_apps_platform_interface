@@ -9,7 +9,7 @@ This package defines the common API contract (Dart side) that all platform imple
 ## ✨ What it provides
 
 * `AppInfo` model → metadata for installed apps (package name, version, install/update times, system flag, optional icon bytes).
-* `AppChangeEvent` model → events for install, uninstall, update, enable, disable.
+* `AppChangeEvent` model → events for install, uninstall, update.
 * `FlutterDeviceAppsPlatform` abstract class → base interface every platform package must extend.
   - `listApps()` - List installed applications
   - `getApp()` - Get details for a specific app

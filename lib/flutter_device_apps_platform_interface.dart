@@ -124,10 +124,10 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Best-effort: launches an app by package name. Returns false if not launchable.
   Future<bool> openApp(String packageName);
 
-  /// Stream of app change events (install, uninstall, update, enable, disable).
+  /// Stream of app change events (install, uninstall, update).
   ///
   /// Platform implementations should emit [AppChangeEvent] objects when apps
-  /// are installed, removed, updated, enabled, or disabled on the device.
+  /// are installed, removed, or updated on the device.
   /// Call [startAppChangeStream] to begin receiving events.
   Stream<AppChangeEvent> get appChanges;
 

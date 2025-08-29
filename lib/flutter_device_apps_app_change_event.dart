@@ -8,17 +8,11 @@ enum AppChangeType {
 
   /// The app was updated to a new version.
   updated,
-
-  /// The app was enabled (re-activated) on the device.
-  enabled,
-
-  /// The app was disabled (deactivated) on the device.
-  disabled,
 }
 
 /// Represents an event when an app's state changes on the device.
 ///
-/// This includes installations, removals, updates, and enable/disable operations.
+/// This includes installations, removals, and updates.
 class AppChangeEvent {
   /// Creates an [AppChangeEvent] with the specified properties.
   ///
@@ -68,8 +62,6 @@ class AppChangeEvent {
         'installed' => AppChangeType.installed,
         'removed' => AppChangeType.removed,
         'updated' => AppChangeType.updated,
-        'enabled' => AppChangeType.enabled,
-        'disabled' => AppChangeType.disabled,
         _ => null,
       };
 }
