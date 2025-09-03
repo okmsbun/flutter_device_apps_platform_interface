@@ -1,3 +1,10 @@
+## 0.2.0
+- Enhanced README.md with professional badge layout for better package visibility
+- Added centered HTML badges for pub.dev, GitHub stars, Flutter documentation, and MIT license
+- Improved documentation presentation and accessibility following modern Flutter package standards
+- Added links to relevant Flutter documentation (deep-linking) for better developer guidance
+- Updated package branding and visual consistency across federated plugin family
+
 ## 0.1.2
 - **BREAKING**: Removed `AppChangeType.enabled` and `AppChangeType.disabled` enum values
 - These event types were defined but never implemented in the Android platform, causing confusion
