@@ -128,20 +128,10 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   ///
   /// Platform implementations should emit [AppChangeEvent] objects when apps
   /// are installed, removed, or updated on the device.
-  /// Call [startAppChangeStream] to begin receiving events.
+  ///
+  /// The stream automatically starts listening when the first subscriber is added
+  /// and stops when all subscribers are removed (broadcast stream behavior).
   Stream<AppChangeEvent> get appChanges;
-
-  /// Starts monitoring for app change events.
-  ///
-  /// Call this method to begin receiving app change events via [appChanges] stream.
-  /// Platform implementations should set up necessary listeners or broadcast receivers.
-  Future<void> startAppChangeStream();
-
-  /// Stops monitoring for app change events.
-  ///
-  /// Call this method to stop receiving app change events and clean up resources.
-  /// Platform implementations should remove listeners or unregister broadcast receivers.
-  Future<void> stopAppChangeStream();
 
   /// Opens the app settings for the specified package name.
   ///
@@ -185,14 +175,6 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
   @override
   Stream<AppChangeEvent> get appChanges =>
       Stream.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
-
-  @override
-  Future<void> startAppChangeStream() =>
-      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
-
-  @override
-  Future<void> stopAppChangeStream() =>
-      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
   Future<bool> openAppSettings(String packageName) =>
