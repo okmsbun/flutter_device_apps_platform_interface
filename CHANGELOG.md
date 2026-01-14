@@ -1,3 +1,6 @@
+## 0.4.0
+App change events now forward the raw Android action string to Dart, which maps it to AppChangeType without breaking existing API.
+
 ## 0.2.0
 - Enhanced README.md with professional badge layout for better package visibility
 - Added centered HTML badges for pub.dev, GitHub stars, Flutter documentation, and MIT license
