@@ -21,6 +21,12 @@ class AppInfo {
     this.isSystem,
     this.iconBytes,
     this.category,
+    this.targetSdkVersion,
+    this.minSdkVersion,
+    this.enabled,
+    this.processName,
+    this.installLocation,
+    this.requestedPermissions,
   });
 
   /// Creates an [AppInfo] from a map of key-value pairs.
@@ -39,6 +45,17 @@ class AppInfo {
         lastUpdateTime != null ? DateTime.fromMillisecondsSinceEpoch(lastUpdateTime) : null;
 
     final int? category = m['category'] != null ? int.tryParse(m['category']!.toString()) : null;
+    final int? targetSdkVersion =
+        m['targetSdkVersion'] != null ? int.tryParse(m['targetSdkVersion']!.toString()) : null;
+    final int? minSdkVersion =
+        m['minSdkVersion'] != null ? int.tryParse(m['minSdkVersion']!.toString()) : null;
+    final bool? enabled = m['enabled'] != null ? bool.tryParse(m['enabled']!.toString()) : null;
+    final int? installLocation =
+        m['installLocation'] != null ? int.tryParse(m['installLocation']!.toString()) : null;
+    final List<String>? requestedPermissions = m['requestedPermissions'] is List<dynamic>
+        ? (m['requestedPermissions']! as List<dynamic>).map((e) => e.toString()).toList()
+        : null;
+
     return AppInfo(
       packageName: m['packageName']?.toString(),
       appName: m['appName']?.toString(),
@@ -50,6 +67,12 @@ class AppInfo {
       iconBytes:
           m['iconBytes'] is List<int> ? Uint8List.fromList(m['iconBytes']! as List<int>) : null,
       category: category,
+      targetSdkVersion: targetSdkVersion,
+      minSdkVersion: minSdkVersion,
+      enabled: enabled,
+      processName: m['processName']?.toString(),
+      installLocation: installLocation,
+      requestedPermissions: requestedPermissions,
     );
   }
 
@@ -80,6 +103,24 @@ class AppInfo {
   /// App category (Android [ApplicationInfo.category], API 26+). Raw int from platform. Null when not set or API < 26.
   final int? category;
 
+  /// Target SDK version (Android [ApplicationInfo.targetSdkVersion]).
+  final int? targetSdkVersion;
+
+  /// Min SDK version (Android [ApplicationInfo.minSdkVersion]).
+  final int? minSdkVersion;
+
+  /// Whether the app is enabled (Android [ApplicationInfo.enabled]).
+  final bool? enabled;
+
+  /// Process name (Android [ApplicationInfo.processName]).
+  final String? processName;
+
+  /// Install location (Android [PackageInfo.installLocation]).
+  final int? installLocation;
+
+  /// Requested permissions (Android [PackageInfo.requestedPermissions]).
+  final List<String>? requestedPermissions;
+
   /// Converts this [AppInfo] to a map representation.
   ///
   /// Useful for serialization to platform channels or other data formats.
@@ -93,6 +134,12 @@ class AppInfo {
         'isSystem': isSystem,
         'iconBytes': iconBytes,
         'category': category,
+        'targetSdkVersion': targetSdkVersion,
+        'minSdkVersion': minSdkVersion,
+        'enabled': enabled,
+        'processName': processName,
+        'installLocation': installLocation,
+        'requestedPermissions': requestedPermissions,
       };
 }
 
