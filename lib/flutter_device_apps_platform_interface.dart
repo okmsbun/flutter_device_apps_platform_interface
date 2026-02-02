@@ -20,6 +20,7 @@ class AppInfo {
     this.lastUpdateTime,
     this.isSystem,
     this.iconBytes,
+    this.category,
   });
 
   /// Creates an [AppInfo] from a map of key-value pairs.
@@ -37,6 +38,7 @@ class AppInfo {
     final DateTime? lastUpdateTimeDate =
         lastUpdateTime != null ? DateTime.fromMillisecondsSinceEpoch(lastUpdateTime) : null;
 
+    final int? category = m['category'] != null ? int.tryParse(m['category']!.toString()) : null;
     return AppInfo(
       packageName: m['packageName']?.toString(),
       appName: m['appName']?.toString(),
@@ -47,6 +49,7 @@ class AppInfo {
       isSystem: m['isSystem'] != null ? bool.tryParse(m['isSystem']!.toString()) : null,
       iconBytes:
           m['iconBytes'] is List<int> ? Uint8List.fromList(m['iconBytes']! as List<int>) : null,
+      category: category,
     );
   }
 
@@ -74,6 +77,9 @@ class AppInfo {
   /// The app icon as raw bytes, if requested and available.
   final Uint8List? iconBytes;
 
+  /// App category (Android [ApplicationInfo.category], API 26+). Raw int from platform. Null when not set or API < 26.
+  final int? category;
+
   /// Converts this [AppInfo] to a map representation.
   ///
   /// Useful for serialization to platform channels or other data formats.
@@ -86,6 +92,7 @@ class AppInfo {
         'lastUpdateTime': lastUpdateTime?.millisecondsSinceEpoch,
         'isSystem': isSystem,
         'iconBytes': iconBytes,
+        'category': category,
       };
 }
 
