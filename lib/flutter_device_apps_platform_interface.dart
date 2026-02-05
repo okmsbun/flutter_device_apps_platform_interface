@@ -26,7 +26,6 @@ class AppInfo {
     this.enabled,
     this.processName,
     this.installLocation,
-    this.requestedPermissions,
   });
 
   /// Creates an [AppInfo] from a map of key-value pairs.
@@ -52,9 +51,6 @@ class AppInfo {
     final bool? enabled = m['enabled'] != null ? bool.tryParse(m['enabled']!.toString()) : null;
     final int? installLocation =
         m['installLocation'] != null ? int.tryParse(m['installLocation']!.toString()) : null;
-    final List<String>? requestedPermissions = m['requestedPermissions'] is List<dynamic>
-        ? (m['requestedPermissions']! as List<dynamic>).map((e) => e.toString()).toList()
-        : null;
 
     return AppInfo(
       packageName: m['packageName']?.toString(),
@@ -72,7 +68,6 @@ class AppInfo {
       enabled: enabled,
       processName: m['processName']?.toString(),
       installLocation: installLocation,
-      requestedPermissions: requestedPermissions,
     );
   }
 
@@ -100,47 +95,23 @@ class AppInfo {
   /// The app icon as raw bytes, if requested and available.
   final Uint8List? iconBytes;
 
-  /// App category (Android [ApplicationInfo.category], API 26+). Raw int from platform. Null when not set or API < 26.
+  /// App category (Android ApplicationInfo.category, API 26+). Raw int from platform. Null when not set or API < 26.
   final int? category;
 
-  /// Target SDK version (Android [ApplicationInfo.targetSdkVersion]).
+  /// Target SDK version (Android ApplicationInfo.targetSdkVersion).
   final int? targetSdkVersion;
 
-  /// Min SDK version (Android [ApplicationInfo.minSdkVersion]).
+  /// Min SDK version (Android ApplicationInfo.minSdkVersion).
   final int? minSdkVersion;
 
-  /// Whether the app is enabled (Android [ApplicationInfo.enabled]).
+  /// Whether the app is enabled (Android ApplicationInfo.enabled).
   final bool? enabled;
 
-  /// Process name (Android [ApplicationInfo.processName]).
+  /// Process name (Android ApplicationInfo.processName).
   final String? processName;
 
-  /// Install location (Android [PackageInfo.installLocation]).
+  /// Install location (Android PackageInfo.installLocation).
   final int? installLocation;
-
-  /// Requested permissions (Android [PackageInfo.requestedPermissions]).
-  final List<String>? requestedPermissions;
-
-  /// Converts this [AppInfo] to a map representation.
-  ///
-  /// Useful for serialization to platform channels or other data formats.
-  Map<String, Object?> toMap() => {
-        'packageName': packageName,
-        'appName': appName,
-        'versionName': versionName,
-        'versionCode': versionCode,
-        'firstInstallTime': firstInstallTime?.millisecondsSinceEpoch,
-        'lastUpdateTime': lastUpdateTime?.millisecondsSinceEpoch,
-        'isSystem': isSystem,
-        'iconBytes': iconBytes,
-        'category': category,
-        'targetSdkVersion': targetSdkVersion,
-        'minSdkVersion': minSdkVersion,
-        'enabled': enabled,
-        'processName': processName,
-        'installLocation': installLocation,
-        'requestedPermissions': requestedPermissions,
-      };
 }
 
 /// Base class every platform implementation must extend.
@@ -174,6 +145,12 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
 
   /// Gets details for a single app.
   Future<AppInfo?> getApp(String packageName, {bool includeIcon = false});
+
+  /// Gets the requested permissions for a specific app.
+  ///
+  /// Implementations should return the Android PackageInfo.requestedPermissions
+  /// list for the given [packageName], or null if not available.
+  Future<List<String>?> getRequestedPermissions(String packageName);
 
   /// Best-effort: launches an app by package name. Returns false if not launchable.
   Future<bool> openApp(String packageName);
@@ -220,6 +197,10 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
 
   @override
   Future<AppInfo?> getApp(String packageName, {bool includeIcon = false}) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<List<String>?> getRequestedPermissions(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override

@@ -1,3 +1,8 @@
+## 0.6.0
+- **BREAKING**: Removed `requestedPermissions` field from `AppInfo` class to improve performance and reduce memory usage
+- Added new API: `getRequestedPermissions(String packageName)` to fetch app permissions on demand
+- Added comprehensive unit tests for `AppInfo`, `AppChangeType`, and `AppChangeEvent` classes
+
 ## 0.5.1
 - Expanded `AppInfo` with additional Android-facing fields: `category`, `targetSdkVersion`, `minSdkVersion`, `enabled`, `processName`, `installLocation`, `requestedPermissions`.
 
