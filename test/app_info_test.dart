@@ -288,7 +288,7 @@ void main() {
         expect(appInfo.appName, 'Full Test App');
         expect(appInfo.versionName, '3.2.1');
         expect(appInfo.versionCode, 321);
-        expect(appInfo.firstInstallTime, DateTime(2024, 1, 1));
+        expect(appInfo.firstInstallTime, DateTime(2024));
         expect(appInfo.lastUpdateTime, DateTime(2024, 12, 31));
         expect(appInfo.isSystem, false);
         expect(appInfo.iconBytes, isA<Uint8List>());
