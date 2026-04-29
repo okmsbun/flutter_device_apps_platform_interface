@@ -13,6 +13,7 @@ void main() {
         expect(appInfo.appName, isNull);
         expect(appInfo.versionName, isNull);
         expect(appInfo.versionCode, isNull);
+        expect(appInfo.uid, isNull);
         expect(appInfo.firstInstallTime, isNull);
         expect(appInfo.lastUpdateTime, isNull);
         expect(appInfo.isSystem, isNull);
@@ -35,6 +36,7 @@ void main() {
           appName: 'Example App',
           versionName: '1.0.0',
           versionCode: 10,
+          uid: 10123,
           firstInstallTime: firstInstallTime,
           lastUpdateTime: lastUpdateTime,
           isSystem: false,
@@ -51,6 +53,7 @@ void main() {
         expect(appInfo.appName, 'Example App');
         expect(appInfo.versionName, '1.0.0');
         expect(appInfo.versionCode, 10);
+        expect(appInfo.uid, 10123);
         expect(appInfo.firstInstallTime, firstInstallTime);
         expect(appInfo.lastUpdateTime, lastUpdateTime);
         expect(appInfo.isSystem, false);
@@ -72,6 +75,7 @@ void main() {
         expect(appInfo.appName, isNull);
         expect(appInfo.versionName, isNull);
         expect(appInfo.versionCode, isNull);
+        expect(appInfo.uid, isNull);
         expect(appInfo.firstInstallTime, isNull);
         expect(appInfo.lastUpdateTime, isNull);
         expect(appInfo.isSystem, isNull);
@@ -103,6 +107,7 @@ void main() {
       test('parses integer fields from int values', () {
         final map = <String, Object?>{
           'versionCode': 42,
+          'uid': 10123,
           'category': 5,
           'targetSdkVersion': 34,
           'minSdkVersion': 23,
@@ -112,6 +117,7 @@ void main() {
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.versionCode, 42);
+        expect(appInfo.uid, 10123);
         expect(appInfo.category, 5);
         expect(appInfo.targetSdkVersion, 34);
         expect(appInfo.minSdkVersion, 23);
@@ -121,6 +127,7 @@ void main() {
       test('parses integer fields from string values', () {
         final map = <String, Object?>{
           'versionCode': '42',
+          'uid': '10123',
           'category': '5',
           'targetSdkVersion': '34',
           'minSdkVersion': '23',
@@ -130,6 +137,7 @@ void main() {
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.versionCode, 42);
+        expect(appInfo.uid, 10123);
         expect(appInfo.category, 5);
         expect(appInfo.targetSdkVersion, 34);
         expect(appInfo.minSdkVersion, 23);
@@ -139,6 +147,7 @@ void main() {
       test('handles invalid integer strings gracefully', () {
         final map = <String, Object?>{
           'versionCode': 'invalid',
+          'uid': 'invalid_uid',
           'category': 'not_a_number',
           'targetSdkVersion': '',
         };
@@ -146,6 +155,7 @@ void main() {
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.versionCode, isNull);
+        expect(appInfo.uid, isNull);
         expect(appInfo.category, isNull);
         expect(appInfo.targetSdkVersion, isNull);
       });
@@ -270,6 +280,7 @@ void main() {
           'appName': 'Full Test App',
           'versionName': '3.2.1',
           'versionCode': 321,
+          'uid': 10199,
           'firstInstallTime': firstInstallMs,
           'lastUpdateTime': lastUpdateMs,
           'isSystem': false,
@@ -288,6 +299,7 @@ void main() {
         expect(appInfo.appName, 'Full Test App');
         expect(appInfo.versionName, '3.2.1');
         expect(appInfo.versionCode, 321);
+        expect(appInfo.uid, 10199);
         expect(appInfo.firstInstallTime, DateTime(2024));
         expect(appInfo.lastUpdateTime, DateTime(2024, 12, 31));
         expect(appInfo.isSystem, false);
