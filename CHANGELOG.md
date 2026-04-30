@@ -1,3 +1,7 @@
+## 0.7.0
+- Expanded `AppInfo` with additional Android raw metadata fields: `uid`, `apkPath`, `apkSizeBytes`, `dataPath`, and `isOnExternalStorage`.
+- Updated `AppInfo` unit tests to cover parsing and null-safety behavior for the new fields.
+
 ## 0.6.0
 - **BREAKING**: Removed `requestedPermissions` field from `AppInfo` class to improve performance and reduce memory usage
 - Added new API: `getRequestedPermissions(String packageName)` to fetch app permissions on demand
