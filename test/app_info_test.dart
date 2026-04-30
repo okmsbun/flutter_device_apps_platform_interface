@@ -15,6 +15,7 @@ void main() {
         expect(appInfo.versionCode, isNull);
         expect(appInfo.uid, isNull);
         expect(appInfo.apkPath, isNull);
+        expect(appInfo.apkSizeBytes, isNull);
         expect(appInfo.dataPath, isNull);
         expect(appInfo.isOnExternalStorage, isNull);
         expect(appInfo.firstInstallTime, isNull);
@@ -41,6 +42,7 @@ void main() {
           versionCode: 10,
           uid: 10123,
           apkPath: '/data/app/com.example.app/base.apk',
+          apkSizeBytes: 12345678,
           dataPath: '/data/user/0/com.example.app',
           isOnExternalStorage: false,
           firstInstallTime: firstInstallTime,
@@ -61,6 +63,7 @@ void main() {
         expect(appInfo.versionCode, 10);
         expect(appInfo.uid, 10123);
         expect(appInfo.apkPath, '/data/app/com.example.app/base.apk');
+        expect(appInfo.apkSizeBytes, 12345678);
         expect(appInfo.dataPath, '/data/user/0/com.example.app');
         expect(appInfo.isOnExternalStorage, false);
         expect(appInfo.firstInstallTime, firstInstallTime);
@@ -86,6 +89,7 @@ void main() {
         expect(appInfo.versionCode, isNull);
         expect(appInfo.uid, isNull);
         expect(appInfo.apkPath, isNull);
+        expect(appInfo.apkSizeBytes, isNull);
         expect(appInfo.dataPath, isNull);
         expect(appInfo.isOnExternalStorage, isNull);
         expect(appInfo.firstInstallTime, isNull);
@@ -124,6 +128,7 @@ void main() {
         final map = <String, Object?>{
           'versionCode': 42,
           'uid': 10123,
+          'apkSizeBytes': 4096,
           'category': 5,
           'targetSdkVersion': 34,
           'minSdkVersion': 23,
@@ -134,6 +139,7 @@ void main() {
 
         expect(appInfo.versionCode, 42);
         expect(appInfo.uid, 10123);
+        expect(appInfo.apkSizeBytes, 4096);
         expect(appInfo.category, 5);
         expect(appInfo.targetSdkVersion, 34);
         expect(appInfo.minSdkVersion, 23);
@@ -144,6 +150,7 @@ void main() {
         final map = <String, Object?>{
           'versionCode': '42',
           'uid': '10123',
+          'apkSizeBytes': '4096',
           'category': '5',
           'targetSdkVersion': '34',
           'minSdkVersion': '23',
@@ -154,6 +161,7 @@ void main() {
 
         expect(appInfo.versionCode, 42);
         expect(appInfo.uid, 10123);
+        expect(appInfo.apkSizeBytes, 4096);
         expect(appInfo.category, 5);
         expect(appInfo.targetSdkVersion, 34);
         expect(appInfo.minSdkVersion, 23);
@@ -164,6 +172,7 @@ void main() {
         final map = <String, Object?>{
           'versionCode': 'invalid',
           'uid': 'invalid_uid',
+          'apkSizeBytes': 'invalid_size',
           'category': 'not_a_number',
           'targetSdkVersion': '',
         };
@@ -172,6 +181,7 @@ void main() {
 
         expect(appInfo.versionCode, isNull);
         expect(appInfo.uid, isNull);
+        expect(appInfo.apkSizeBytes, isNull);
         expect(appInfo.category, isNull);
         expect(appInfo.targetSdkVersion, isNull);
       });
@@ -304,6 +314,7 @@ void main() {
           'versionCode': 321,
           'uid': 10199,
           'apkPath': '/data/app/com.test.fullapp/base.apk',
+          'apkSizeBytes': 555000,
           'dataPath': '/data/user/0/com.test.fullapp',
           'isOnExternalStorage': false,
           'firstInstallTime': firstInstallMs,
@@ -326,6 +337,7 @@ void main() {
         expect(appInfo.versionCode, 321);
         expect(appInfo.uid, 10199);
         expect(appInfo.apkPath, '/data/app/com.test.fullapp/base.apk');
+        expect(appInfo.apkSizeBytes, 555000);
         expect(appInfo.dataPath, '/data/user/0/com.test.fullapp');
         expect(appInfo.isOnExternalStorage, false);
         expect(appInfo.firstInstallTime, DateTime(2024));
