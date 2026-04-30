@@ -13,6 +13,11 @@ void main() {
         expect(appInfo.appName, isNull);
         expect(appInfo.versionName, isNull);
         expect(appInfo.versionCode, isNull);
+        expect(appInfo.uid, isNull);
+        expect(appInfo.apkPath, isNull);
+        expect(appInfo.apkSizeBytes, isNull);
+        expect(appInfo.dataPath, isNull);
+        expect(appInfo.isOnExternalStorage, isNull);
         expect(appInfo.firstInstallTime, isNull);
         expect(appInfo.lastUpdateTime, isNull);
         expect(appInfo.isSystem, isNull);
@@ -35,6 +40,11 @@ void main() {
           appName: 'Example App',
           versionName: '1.0.0',
           versionCode: 10,
+          uid: 10123,
+          apkPath: '/data/app/com.example.app/base.apk',
+          apkSizeBytes: 12345678,
+          dataPath: '/data/user/0/com.example.app',
+          isOnExternalStorage: false,
           firstInstallTime: firstInstallTime,
           lastUpdateTime: lastUpdateTime,
           isSystem: false,
@@ -51,6 +61,11 @@ void main() {
         expect(appInfo.appName, 'Example App');
         expect(appInfo.versionName, '1.0.0');
         expect(appInfo.versionCode, 10);
+        expect(appInfo.uid, 10123);
+        expect(appInfo.apkPath, '/data/app/com.example.app/base.apk');
+        expect(appInfo.apkSizeBytes, 12345678);
+        expect(appInfo.dataPath, '/data/user/0/com.example.app');
+        expect(appInfo.isOnExternalStorage, false);
         expect(appInfo.firstInstallTime, firstInstallTime);
         expect(appInfo.lastUpdateTime, lastUpdateTime);
         expect(appInfo.isSystem, false);
@@ -72,6 +87,11 @@ void main() {
         expect(appInfo.appName, isNull);
         expect(appInfo.versionName, isNull);
         expect(appInfo.versionCode, isNull);
+        expect(appInfo.uid, isNull);
+        expect(appInfo.apkPath, isNull);
+        expect(appInfo.apkSizeBytes, isNull);
+        expect(appInfo.dataPath, isNull);
+        expect(appInfo.isOnExternalStorage, isNull);
         expect(appInfo.firstInstallTime, isNull);
         expect(appInfo.lastUpdateTime, isNull);
         expect(appInfo.isSystem, isNull);
@@ -89,6 +109,8 @@ void main() {
           'packageName': 'com.example.app',
           'appName': 'Example App',
           'versionName': '2.1.0',
+          'apkPath': '/data/app/com.example.app/base.apk',
+          'dataPath': '/data/user/0/com.example.app',
           'processName': 'com.example.process',
         };
 
@@ -97,12 +119,16 @@ void main() {
         expect(appInfo.packageName, 'com.example.app');
         expect(appInfo.appName, 'Example App');
         expect(appInfo.versionName, '2.1.0');
+        expect(appInfo.apkPath, '/data/app/com.example.app/base.apk');
+        expect(appInfo.dataPath, '/data/user/0/com.example.app');
         expect(appInfo.processName, 'com.example.process');
       });
 
       test('parses integer fields from int values', () {
         final map = <String, Object?>{
           'versionCode': 42,
+          'uid': 10123,
+          'apkSizeBytes': 4096,
           'category': 5,
           'targetSdkVersion': 34,
           'minSdkVersion': 23,
@@ -112,6 +138,8 @@ void main() {
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.versionCode, 42);
+        expect(appInfo.uid, 10123);
+        expect(appInfo.apkSizeBytes, 4096);
         expect(appInfo.category, 5);
         expect(appInfo.targetSdkVersion, 34);
         expect(appInfo.minSdkVersion, 23);
@@ -121,6 +149,8 @@ void main() {
       test('parses integer fields from string values', () {
         final map = <String, Object?>{
           'versionCode': '42',
+          'uid': '10123',
+          'apkSizeBytes': '4096',
           'category': '5',
           'targetSdkVersion': '34',
           'minSdkVersion': '23',
@@ -130,6 +160,8 @@ void main() {
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.versionCode, 42);
+        expect(appInfo.uid, 10123);
+        expect(appInfo.apkSizeBytes, 4096);
         expect(appInfo.category, 5);
         expect(appInfo.targetSdkVersion, 34);
         expect(appInfo.minSdkVersion, 23);
@@ -139,6 +171,8 @@ void main() {
       test('handles invalid integer strings gracefully', () {
         final map = <String, Object?>{
           'versionCode': 'invalid',
+          'uid': 'invalid_uid',
+          'apkSizeBytes': 'invalid_size',
           'category': 'not_a_number',
           'targetSdkVersion': '',
         };
@@ -146,6 +180,8 @@ void main() {
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.versionCode, isNull);
+        expect(appInfo.uid, isNull);
+        expect(appInfo.apkSizeBytes, isNull);
         expect(appInfo.category, isNull);
         expect(appInfo.targetSdkVersion, isNull);
       });
@@ -154,36 +190,42 @@ void main() {
         final map = <String, Object?>{
           'isSystem': true,
           'enabled': false,
+          'isOnExternalStorage': true,
         };
 
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.isSystem, true);
         expect(appInfo.enabled, false);
+        expect(appInfo.isOnExternalStorage, true);
       });
 
       test('parses boolean fields from string values', () {
         final map = <String, Object?>{
           'isSystem': 'true',
           'enabled': 'false',
+          'isOnExternalStorage': 'true',
         };
 
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.isSystem, true);
         expect(appInfo.enabled, false);
+        expect(appInfo.isOnExternalStorage, true);
       });
 
       test('handles invalid boolean strings gracefully', () {
         final map = <String, Object?>{
           'isSystem': 'yes',
           'enabled': 'no',
+          'isOnExternalStorage': 'unknown',
         };
 
         final appInfo = AppInfo.fromMap(map);
 
         expect(appInfo.isSystem, isNull);
         expect(appInfo.enabled, isNull);
+        expect(appInfo.isOnExternalStorage, isNull);
       });
 
       test('parses DateTime fields from milliseconds', () {
@@ -270,6 +312,11 @@ void main() {
           'appName': 'Full Test App',
           'versionName': '3.2.1',
           'versionCode': 321,
+          'uid': 10199,
+          'apkPath': '/data/app/com.test.fullapp/base.apk',
+          'apkSizeBytes': 555000,
+          'dataPath': '/data/user/0/com.test.fullapp',
+          'isOnExternalStorage': false,
           'firstInstallTime': firstInstallMs,
           'lastUpdateTime': lastUpdateMs,
           'isSystem': false,
@@ -288,6 +335,11 @@ void main() {
         expect(appInfo.appName, 'Full Test App');
         expect(appInfo.versionName, '3.2.1');
         expect(appInfo.versionCode, 321);
+        expect(appInfo.uid, 10199);
+        expect(appInfo.apkPath, '/data/app/com.test.fullapp/base.apk');
+        expect(appInfo.apkSizeBytes, 555000);
+        expect(appInfo.dataPath, '/data/user/0/com.test.fullapp');
+        expect(appInfo.isOnExternalStorage, false);
         expect(appInfo.firstInstallTime, DateTime(2024));
         expect(appInfo.lastUpdateTime, DateTime(2024, 12, 31));
         expect(appInfo.isSystem, false);

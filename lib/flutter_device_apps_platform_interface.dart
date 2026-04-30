@@ -16,6 +16,11 @@ class AppInfo {
     this.appName,
     this.versionName,
     this.versionCode,
+    this.uid,
+    this.apkPath,
+    this.apkSizeBytes,
+    this.dataPath,
+    this.isOnExternalStorage,
     this.firstInstallTime,
     this.lastUpdateTime,
     this.isSystem,
@@ -57,6 +62,13 @@ class AppInfo {
       appName: m['appName']?.toString(),
       versionName: m['versionName']?.toString(),
       versionCode: m['versionCode'] != null ? int.tryParse(m['versionCode']!.toString()) : null,
+      uid: m['uid'] != null ? int.tryParse(m['uid']!.toString()) : null,
+      apkPath: m['apkPath']?.toString(),
+      apkSizeBytes: m['apkSizeBytes'] != null ? int.tryParse(m['apkSizeBytes']!.toString()) : null,
+      dataPath: m['dataPath']?.toString(),
+      isOnExternalStorage: m['isOnExternalStorage'] != null
+          ? bool.tryParse(m['isOnExternalStorage']!.toString())
+          : null,
       firstInstallTime: firstInstallTimeDate,
       lastUpdateTime: lastUpdateTimeDate,
       isSystem: m['isSystem'] != null ? bool.tryParse(m['isSystem']!.toString()) : null,
@@ -82,6 +94,25 @@ class AppInfo {
 
   /// The internal version code used for version comparison.
   final int? versionCode;
+
+  /// Linux/kernel-level UID assigned to the app on the device.
+  ///
+  /// This is not a globally unique or stable business identifier.
+  final int? uid;
+
+  /// Full path to the base APK file (Android ApplicationInfo.sourceDir).
+  final String? apkPath;
+
+  /// APK size in bytes (base APK + split APK files when present).
+  ///
+  /// Null when not available.
+  final int? apkSizeBytes;
+
+  /// Full path to the app's private data directory (Android ApplicationInfo.dataDir).
+  final String? dataPath;
+
+  /// Raw Android flag from ApplicationInfo.FLAG_EXTERNAL_STORAGE.
+  final bool? isOnExternalStorage;
 
   /// The date and time when the app was first installed on the device.
   final DateTime? firstInstallTime;
