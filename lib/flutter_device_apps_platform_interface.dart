@@ -38,24 +38,31 @@ class AppInfo {
   /// The map typically comes from platform-specific implementations.
   /// Handles type conversion and null safety for various data types.
   factory AppInfo.fromMap(Map<String, Object?> m) {
-    final int? firstInstallTime =
-        m['firstInstallTime'] != null ? int.tryParse(m['firstInstallTime']!.toString()) : null;
-    final DateTime? firstInstallTimeDate =
-        firstInstallTime != null ? DateTime.fromMillisecondsSinceEpoch(firstInstallTime) : null;
+    final int? firstInstallTime = m['firstInstallTime'] != null
+        ? int.tryParse(m['firstInstallTime']!.toString())
+        : null;
+    final DateTime? firstInstallTimeDate = firstInstallTime != null
+        ? DateTime.fromMillisecondsSinceEpoch(firstInstallTime)
+        : null;
 
-    final int? lastUpdateTime =
-        m['lastUpdateTime'] != null ? int.tryParse(m['lastUpdateTime']!.toString()) : null;
-    final DateTime? lastUpdateTimeDate =
-        lastUpdateTime != null ? DateTime.fromMillisecondsSinceEpoch(lastUpdateTime) : null;
+    final int? lastUpdateTime = m['lastUpdateTime'] != null
+        ? int.tryParse(m['lastUpdateTime']!.toString())
+        : null;
+    final DateTime? lastUpdateTimeDate = lastUpdateTime != null
+        ? DateTime.fromMillisecondsSinceEpoch(lastUpdateTime)
+        : null;
 
     final int? category = m['category'] != null ? int.tryParse(m['category']!.toString()) : null;
-    final int? targetSdkVersion =
-        m['targetSdkVersion'] != null ? int.tryParse(m['targetSdkVersion']!.toString()) : null;
-    final int? minSdkVersion =
-        m['minSdkVersion'] != null ? int.tryParse(m['minSdkVersion']!.toString()) : null;
+    final int? targetSdkVersion = m['targetSdkVersion'] != null
+        ? int.tryParse(m['targetSdkVersion']!.toString())
+        : null;
+    final int? minSdkVersion = m['minSdkVersion'] != null
+        ? int.tryParse(m['minSdkVersion']!.toString())
+        : null;
     final bool? enabled = m['enabled'] != null ? bool.tryParse(m['enabled']!.toString()) : null;
-    final int? installLocation =
-        m['installLocation'] != null ? int.tryParse(m['installLocation']!.toString()) : null;
+    final int? installLocation = m['installLocation'] != null
+        ? int.tryParse(m['installLocation']!.toString())
+        : null;
 
     return AppInfo(
       packageName: m['packageName']?.toString(),
@@ -72,8 +79,9 @@ class AppInfo {
       firstInstallTime: firstInstallTimeDate,
       lastUpdateTime: lastUpdateTimeDate,
       isSystem: m['isSystem'] != null ? bool.tryParse(m['isSystem']!.toString()) : null,
-      iconBytes:
-          m['iconBytes'] is List<int> ? Uint8List.fromList(m['iconBytes']! as List<int>) : null,
+      iconBytes: m['iconBytes'] is List<int>
+          ? Uint8List.fromList(m['iconBytes']! as List<int>)
+          : null,
       category: category,
       targetSdkVersion: targetSdkVersion,
       minSdkVersion: minSdkVersion,
@@ -145,6 +153,50 @@ class AppInfo {
   final int? installLocation;
 }
 
+/// Information about how an app was installed.
+class AppInstallSourceInfo {
+  /// Creates installation source information with optional platform metadata.
+  const AppInstallSourceInfo({
+    this.installingPackageName,
+    this.initiatingPackageName,
+    this.originatingPackageName,
+    this.packageSource,
+    this.updateOwnerPackageName,
+  });
+
+  /// Creates installation source information from a platform map.
+  factory AppInstallSourceInfo.fromMap(Map<String, Object?> m) => AppInstallSourceInfo(
+    installingPackageName: m['installingPackageName']?.toString(),
+    initiatingPackageName: m['initiatingPackageName']?.toString(),
+    originatingPackageName: m['originatingPackageName']?.toString(),
+    packageSource: m['packageSource'] != null ? int.tryParse(m['packageSource']!.toString()) : null,
+    updateOwnerPackageName: m['updateOwnerPackageName']?.toString(),
+  );
+
+  /// The installer of record, or null when unavailable.
+  ///
+  /// This value can be changed after installation. Null does not establish
+  /// whether an app was sideloaded.
+  final String? installingPackageName;
+
+  /// The package that requested installation (Android API 30+).
+  final String? initiatingPackageName;
+
+  /// The package on whose behalf installation was requested (Android API 30+).
+  ///
+  /// Supplied by the installer and not verified by Android. Access is restricted
+  /// by Android permissions, so this value is usually null for ordinary apps.
+  final String? originatingPackageName;
+
+  /// Raw Android PackageInstaller.PACKAGE_SOURCE_* value (API 33+).
+  ///
+  /// Null on older Android versions. Zero means the source is unspecified.
+  final int? packageSource;
+
+  /// The package owning updates (Android API 34+), or null when unavailable.
+  final String? updateOwnerPackageName;
+}
+
 /// Base class every platform implementation must extend.
 abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Creates a [FlutterDeviceAppsPlatform] with the provided [token].
@@ -177,6 +229,24 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Gets details for a single app.
   Future<AppInfo?> getApp(String packageName, {bool includeIcon = false});
 
+  /// Gets the app icon as PNG bytes without loading the full app metadata.
+  ///
+  /// Returns null when the package is missing, not visible, or its icon resources
+  /// cannot be loaded. Returns Android's default icon if no icon is defined.
+  Future<Uint8List?> getAppIcon(String packageName);
+
+  /// Whether [packageName] is installed and visible to the calling app.
+  ///
+  /// Includes disabled apps and apps without a launcher entry. Returns false
+  /// when the package is missing or hidden by Android package visibility rules.
+  Future<bool> isAppInstalled(String packageName);
+
+  /// Whether [packageName] is a system app, using the same flag as [AppInfo.isSystem].
+  ///
+  /// Returns null when the package is missing or hidden by Android package
+  /// visibility rules. Includes disabled apps and apps without a launcher entry.
+  Future<bool?> isSystemApp(String packageName);
+
   /// Gets the requested permissions for a specific app.
   ///
   /// Implementations should return the Android PackageInfo.requestedPermissions
@@ -207,10 +277,19 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Returns true if the app was successfully uninstalled, false otherwise.
   Future<bool> uninstallApp(String packageName);
 
+  /// Gets installation source information without loading full app metadata.
+  ///
+  /// Returns null when the package is missing or not visible. On Android before
+  /// API 30, only installingPackageName is available. A returned model can have
+  /// null fields when Android does not provide the corresponding information.
+  Future<AppInstallSourceInfo?> getInstallSourceInfo(String packageName);
+
   /// Gets the installer store for the specified package name.
   ///
   /// Platform implementations should return the installer store for the given package.
   /// Returns the installer store name or null if not available.
+  // Newly deprecated; retain the method for backwards compatibility.
+  @Deprecated('Use getInstallSourceInfo() and its installingPackageName instead.')
   Future<String?> getInstallerStore(String packageName);
 }
 
@@ -223,11 +302,22 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
     bool includeSystem = false,
     bool onlyLaunchable = true,
     bool includeIcons = false,
-  }) =>
-      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+  }) => Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
   Future<AppInfo?> getApp(String packageName, {bool includeIcon = false}) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<Uint8List?> getAppIcon(String packageName) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<bool> isAppInstalled(String packageName) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<bool?> isSystemApp(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
@@ -251,6 +341,12 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
+  Future<AppInstallSourceInfo?> getInstallSourceInfo(String packageName) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  // Newly deprecated; retain the method for backwards compatibility.
+  @Deprecated('Use getInstallSourceInfo() and its installingPackageName instead.')
   Future<String?> getInstallerStore(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 }
