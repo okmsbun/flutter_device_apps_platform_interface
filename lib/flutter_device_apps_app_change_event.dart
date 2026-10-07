@@ -17,11 +17,7 @@ class AppChangeEvent {
   /// Creates an [AppChangeEvent] with the specified properties.
   ///
   /// All parameters are optional and represent the details of the app change.
-  const AppChangeEvent({
-    this.packageName,
-    this.type,
-    this.isReplacing,
-  });
+  const AppChangeEvent({this.packageName, this.type, this.isReplacing});
 
   /// Creates an [AppChangeEvent] from a map of key-value pairs.
   ///
@@ -30,8 +26,9 @@ class AppChangeEvent {
   factory AppChangeEvent.fromMap(Map<String, Object?> m) {
     final String? pkg = m['packageName']?.toString();
     final String? t = m['type']?.toString();
-    final bool? replacing =
-        m['isReplacing'] != null ? bool.tryParse(m['isReplacing']!.toString()) : null;
+    final bool? replacing = m['isReplacing'] != null
+        ? bool.tryParse(m['isReplacing']!.toString())
+        : null;
 
     return AppChangeEvent(
       packageName: pkg,
@@ -53,15 +50,15 @@ class AppChangeEvent {
   ///
   /// Useful for serialization to platform channels or other data formats.
   Map<String, Object?> toMap() => {
-        'packageName': packageName,
-        'type': type?.name,
-        'isReplacing': isReplacing,
-      };
+    'packageName': packageName,
+    'type': type?.name,
+    'isReplacing': isReplacing,
+  };
 
   static AppChangeType? _parseType(String raw) => switch (raw) {
-        'installed' => AppChangeType.installed,
-        'removed' => AppChangeType.removed,
-        'updated' => AppChangeType.updated,
-        _ => null,
-      };
+    'installed' => AppChangeType.installed,
+    'removed' => AppChangeType.removed,
+    'updated' => AppChangeType.updated,
+    _ => null,
+  };
 }
