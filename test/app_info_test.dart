@@ -259,10 +259,7 @@ void main() {
       });
 
       test('handles invalid DateTime strings gracefully', () {
-        final map = <String, Object?>{
-          'firstInstallTime': 'not_a_timestamp',
-          'lastUpdateTime': '',
-        };
+        final map = <String, Object?>{'firstInstallTime': 'not_a_timestamp', 'lastUpdateTime': ''};
 
         final appInfo = AppInfo.fromMap(map);
 
@@ -272,9 +269,7 @@ void main() {
 
       test('parses iconBytes from List<int>', () {
         final iconData = <int>[255, 216, 255, 224, 0, 16];
-        final map = <String, Object?>{
-          'iconBytes': iconData,
-        };
+        final map = <String, Object?>{'iconBytes': iconData};
 
         final appInfo = AppInfo.fromMap(map);
 
@@ -283,9 +278,7 @@ void main() {
       });
 
       test('handles non-List iconBytes gracefully', () {
-        final map = <String, Object?>{
-          'iconBytes': 'not_a_list',
-        };
+        final map = <String, Object?>{'iconBytes': 'not_a_list'};
 
         final appInfo = AppInfo.fromMap(map);
 
@@ -293,9 +286,7 @@ void main() {
       });
 
       test('handles null iconBytes gracefully', () {
-        final map = <String, Object?>{
-          'iconBytes': null,
-        };
+        final map = <String, Object?>{'iconBytes': null};
 
         final appInfo = AppInfo.fromMap(map);
 
