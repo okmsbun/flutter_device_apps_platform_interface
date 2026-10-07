@@ -1,3 +1,14 @@
+## 1.0.0
+
+- **BREAKING**: Raised the minimum Dart SDK version to 3.12.0.
+- **BREAKING**: Platform implementations must implement the new abstract query methods and accept `packageNamePrefix` in their `listApps` override.
+- Added `isAppInstalled`, `isSystemApp`, `isAppEnabled`, and `isAppLaunchable` to query app state without loading full app metadata.
+- Added `getAppIcon` to retrieve an app icon separately as PNG bytes.
+- Added `getInstallSourceInfo` and the `AppInstallSourceInfo` model with `installingPackageName`, `initiatingPackageName`, `originatingPackageName`, `packageSource`, and `updateOwnerPackageName`.
+- Deprecated `getInstallerStore`. Use `getInstallSourceInfo` and its `installingPackageName` field instead.
+- Added the optional `packageNamePrefix` filter to `listApps`. Matching is case-sensitive; null or empty disables the filter.
+- Updated package topics and directed issue reports to the main `flutter_device_apps` repository.
+
 ## 0.7.0
 - Expanded `AppInfo` with additional Android raw metadata fields: `uid`, `apkPath`, `apkSizeBytes`, `dataPath`, and `isOnExternalStorage`.
 - Updated `AppInfo` unit tests to cover parsing and null-safety behavior for the new fields.
