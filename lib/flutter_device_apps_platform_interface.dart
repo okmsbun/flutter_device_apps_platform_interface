@@ -220,10 +220,14 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   }
 
   /// Lists installed apps.
+  ///
+  /// [packageNamePrefix] filters package names with a case-sensitive prefix
+  /// before loading app metadata and icons. Null or empty disables this filter.
   Future<List<AppInfo>> listApps({
     bool includeSystem = false,
     bool onlyLaunchable = true,
     bool includeIcons = false,
+    String? packageNamePrefix,
   });
 
   /// Gets details for a single app.
@@ -246,6 +250,19 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Returns null when the package is missing or hidden by Android package
   /// visibility rules. Includes disabled apps and apps without a launcher entry.
   Future<bool?> isSystemApp(String packageName);
+
+  /// Whether [packageName] is enabled, using the same value as [AppInfo.enabled].
+  ///
+  /// Returns null when the package is missing or hidden by Android package
+  /// visibility rules. An enabled app may still have no launchable activity.
+  Future<bool?> isAppEnabled(String packageName);
+
+  /// Whether Android provides a launch intent for [packageName], as in [openApp].
+  ///
+  /// Does not open the app. Returns false when the package is missing, not
+  /// visible, or has no suitable entry activity. True does not guarantee that
+  /// a subsequent launch will succeed.
+  Future<bool> isAppLaunchable(String packageName);
 
   /// Gets the requested permissions for a specific app.
   ///
@@ -302,6 +319,7 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
     bool includeSystem = false,
     bool onlyLaunchable = true,
     bool includeIcons = false,
+    String? packageNamePrefix,
   }) => Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
@@ -318,6 +336,14 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
 
   @override
   Future<bool?> isSystemApp(String packageName) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<bool?> isAppEnabled(String packageName) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<bool> isAppLaunchable(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
