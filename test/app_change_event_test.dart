@@ -40,9 +40,7 @@ void main() {
       });
 
       test('creates instance with partial values', () {
-        const event = AppChangeEvent(
-          packageName: 'com.example.app',
-        );
+        const event = AppChangeEvent(packageName: 'com.example.app');
 
         expect(event.packageName, 'com.example.app');
         expect(event.type, isNull);
@@ -60,81 +58,59 @@ void main() {
       });
 
       test('parses packageName correctly', () {
-        final event = AppChangeEvent.fromMap({
-          'packageName': 'com.test.app',
-        });
+        final event = AppChangeEvent.fromMap({'packageName': 'com.test.app'});
 
         expect(event.packageName, 'com.test.app');
       });
 
       test('parses type "installed" correctly', () {
-        final event = AppChangeEvent.fromMap({
-          'type': 'installed',
-        });
+        final event = AppChangeEvent.fromMap({'type': 'installed'});
 
         expect(event.type, AppChangeType.installed);
       });
 
       test('parses type "removed" correctly', () {
-        final event = AppChangeEvent.fromMap({
-          'type': 'removed',
-        });
+        final event = AppChangeEvent.fromMap({'type': 'removed'});
 
         expect(event.type, AppChangeType.removed);
       });
 
       test('parses type "updated" correctly', () {
-        final event = AppChangeEvent.fromMap({
-          'type': 'updated',
-        });
+        final event = AppChangeEvent.fromMap({'type': 'updated'});
 
         expect(event.type, AppChangeType.updated);
       });
 
       test('returns null type for invalid type string', () {
-        final event = AppChangeEvent.fromMap({
-          'type': 'unknown',
-        });
+        final event = AppChangeEvent.fromMap({'type': 'unknown'});
 
         expect(event.type, isNull);
       });
 
       test('returns null type for empty type string', () {
-        final event = AppChangeEvent.fromMap({
-          'type': '',
-        });
+        final event = AppChangeEvent.fromMap({'type': ''});
 
         expect(event.type, isNull);
       });
 
       test('parses isReplacing from bool value', () {
-        final eventTrue = AppChangeEvent.fromMap({
-          'isReplacing': true,
-        });
-        final eventFalse = AppChangeEvent.fromMap({
-          'isReplacing': false,
-        });
+        final eventTrue = AppChangeEvent.fromMap({'isReplacing': true});
+        final eventFalse = AppChangeEvent.fromMap({'isReplacing': false});
 
         expect(eventTrue.isReplacing, true);
         expect(eventFalse.isReplacing, false);
       });
 
       test('parses isReplacing from string value', () {
-        final eventTrue = AppChangeEvent.fromMap({
-          'isReplacing': 'true',
-        });
-        final eventFalse = AppChangeEvent.fromMap({
-          'isReplacing': 'false',
-        });
+        final eventTrue = AppChangeEvent.fromMap({'isReplacing': 'true'});
+        final eventFalse = AppChangeEvent.fromMap({'isReplacing': 'false'});
 
         expect(eventTrue.isReplacing, true);
         expect(eventFalse.isReplacing, false);
       });
 
       test('returns null isReplacing for invalid string', () {
-        final event = AppChangeEvent.fromMap({
-          'isReplacing': 'yes',
-        });
+        final event = AppChangeEvent.fromMap({'isReplacing': 'yes'});
 
         expect(event.isReplacing, isNull);
       });
@@ -190,10 +166,7 @@ void main() {
       });
 
       test('converts partial event to map', () {
-        const event = AppChangeEvent(
-          packageName: 'com.partial.app',
-          isReplacing: true,
-        );
+        const event = AppChangeEvent(packageName: 'com.partial.app', isReplacing: true);
         final Map<String, Object?> map = event.toMap();
 
         expect(map['packageName'], 'com.partial.app');
