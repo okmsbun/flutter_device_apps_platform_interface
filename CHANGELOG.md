@@ -1,3 +1,10 @@
+## 1.1.0
+
+- **BREAKING**: Implementations must add `getApps` and `detectAppFrameworks`.
+- **BREAKING**: Added `packageNameContains` to `listApps`; combine filters with AND.
+- **BREAKING**: Removed `getInstallerStore`; use `getInstallSourceInfo`.
+- Added the `AppFramework` enum.
+
 ## 1.0.0
 
 - **BREAKING**: Raised the minimum Dart SDK version to 3.12.0.
