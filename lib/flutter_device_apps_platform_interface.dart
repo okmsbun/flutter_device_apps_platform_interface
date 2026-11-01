@@ -4,6 +4,30 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'flutter_device_apps_app_change_event.dart';
 
+/// Framework or runtime families identified by known Android APK library names.
+///
+/// A match indicates a packaged component, not which technology renders every
+/// screen or whether that component is currently in use.
+enum AppFramework {
+  /// Flutter engine libraries.
+  flutter,
+
+  /// React Native libraries, including the legacy JNI library.
+  reactNative,
+
+  /// Unity engine libraries.
+  unity,
+
+  /// Unreal Engine libraries, including the legacy UE4 library.
+  unrealEngine,
+
+  /// Godot engine libraries.
+  godot,
+
+  /// .NET Android runtime glue; does not distinguish MAUI from Xamarin.
+  dotnetAndroid,
+}
+
 /// Information about an installed app on the device.
 ///
 /// Contains metadata like package name, version, install times, and optional icon data.
@@ -246,6 +270,14 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Set [includeIcons] to load icons alongside app metadata (default: false).
   Future<List<AppInfo>> getApps(List<String> packageNames, {bool includeIcons = false});
 
+  /// Detects known framework library names in the base and installed split APKs.
+  ///
+  /// Returns unique matches in [AppFramework.values] order. An empty list means
+  /// no supported indicator was found after all APKs were read successfully.
+  /// Throws if [packageName] is blank, missing or hidden, or any APK cannot be
+  /// read. Does not inspect DEX code or determine the app's primary UI framework.
+  Future<List<AppFramework>> detectAppFrameworks(String packageName);
+
   /// Gets the app icon as PNG bytes without loading the full app metadata.
   ///
   /// Returns null when the package is missing, not visible, or its icon resources
@@ -334,6 +366,10 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
 
   @override
   Future<List<AppInfo>> getApps(List<String> packageNames, {bool includeIcons = false}) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<List<AppFramework>> detectAppFrameworks(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override

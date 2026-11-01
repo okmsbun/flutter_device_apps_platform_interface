@@ -10,6 +10,7 @@ void main() {
     );
     await expectLater(platform.getAppIcon('com.example.user'), throwsUnsupportedError);
     await expectLater(platform.getApps(['com.example.user']), throwsUnsupportedError);
+    await expectLater(platform.detectAppFrameworks('com.example.user'), throwsUnsupportedError);
     await expectLater(platform.isAppInstalled('com.example.user'), throwsUnsupportedError);
     await expectLater(platform.isSystemApp('com.example.user'), throwsUnsupportedError);
     await expectLater(platform.isAppEnabled('com.example.user'), throwsUnsupportedError);
