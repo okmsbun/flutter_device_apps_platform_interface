@@ -237,6 +237,15 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Gets details for a single app.
   Future<AppInfo?> getApp(String packageName, {bool includeIcon = false});
 
+  /// Gets installed apps by their exact [packageNames] without listing all apps.
+  ///
+  /// Returns each available package once, in order of its first occurrence.
+  /// Missing, hidden, and blank package names are skipped. An empty input returns
+  /// an empty list. Names are case-sensitive and are not trimmed.
+  /// Includes system apps and apps without a launcher entry when visible.
+  /// Set [includeIcons] to load icons alongside app metadata (default: false).
+  Future<List<AppInfo>> getApps(List<String> packageNames, {bool includeIcons = false});
+
   /// Gets the app icon as PNG bytes without loading the full app metadata.
   ///
   /// Returns null when the package is missing, not visible, or its icon resources
@@ -321,6 +330,10 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
 
   @override
   Future<AppInfo?> getApp(String packageName, {bool includeIcon = false}) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<List<AppInfo>> getApps(List<String> packageNames, {bool includeIcons = false}) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
