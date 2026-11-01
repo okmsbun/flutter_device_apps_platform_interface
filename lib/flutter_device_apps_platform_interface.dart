@@ -4,6 +4,30 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'flutter_device_apps_app_change_event.dart';
 
+/// Framework or runtime families identified by known Android APK library names.
+///
+/// A match indicates a packaged component, not which technology renders every
+/// screen or whether that component is currently in use.
+enum AppFramework {
+  /// Flutter engine libraries.
+  flutter,
+
+  /// React Native libraries, including the legacy JNI library.
+  reactNative,
+
+  /// Unity engine libraries.
+  unity,
+
+  /// Unreal Engine libraries, including the legacy UE4 library.
+  unrealEngine,
+
+  /// Godot engine libraries.
+  godot,
+
+  /// .NET Android runtime glue; does not distinguish MAUI from Xamarin.
+  dotnetAndroid,
+}
+
 /// Information about an installed app on the device.
 ///
 /// Contains metadata like package name, version, install times, and optional icon data.
@@ -221,17 +245,38 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
 
   /// Lists installed apps.
   ///
-  /// [packageNamePrefix] filters package names with a case-sensitive prefix
-  /// before loading app metadata and icons. Null or empty disables this filter.
+  /// [packageNamePrefix] matches the start of a package name, and
+  /// [packageNameContains] matches a substring anywhere in a package name.
+  /// Both filters are case-sensitive and run before loading app metadata and
+  /// icons. Null or empty disables each filter independently. When both are
+  /// provided, both must match.
   Future<List<AppInfo>> listApps({
     bool includeSystem = false,
     bool onlyLaunchable = true,
     bool includeIcons = false,
     String? packageNamePrefix,
+    String? packageNameContains,
   });
 
   /// Gets details for a single app.
   Future<AppInfo?> getApp(String packageName, {bool includeIcon = false});
+
+  /// Gets installed apps by their exact [packageNames] without listing all apps.
+  ///
+  /// Returns each available package once, in order of its first occurrence.
+  /// Missing, hidden, and blank package names are skipped. An empty input returns
+  /// an empty list. Names are case-sensitive and are not trimmed.
+  /// Includes system apps and apps without a launcher entry when visible.
+  /// Set [includeIcons] to load icons alongside app metadata (default: false).
+  Future<List<AppInfo>> getApps(List<String> packageNames, {bool includeIcons = false});
+
+  /// Detects known framework library names in the base and installed split APKs.
+  ///
+  /// Returns unique matches in [AppFramework.values] order. An empty list means
+  /// no supported indicator was found after all APKs were read successfully.
+  /// Throws if [packageName] is blank, missing or hidden, or any APK cannot be
+  /// read. Does not inspect DEX code or determine the app's primary UI framework.
+  Future<List<AppFramework>> detectAppFrameworks(String packageName);
 
   /// Gets the app icon as PNG bytes without loading the full app metadata.
   ///
@@ -300,14 +345,6 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// API 30, only installingPackageName is available. A returned model can have
   /// null fields when Android does not provide the corresponding information.
   Future<AppInstallSourceInfo?> getInstallSourceInfo(String packageName);
-
-  /// Gets the installer store for the specified package name.
-  ///
-  /// Platform implementations should return the installer store for the given package.
-  /// Returns the installer store name or null if not available.
-  // Newly deprecated; retain the method for backwards compatibility.
-  @Deprecated('Use getInstallSourceInfo() and its installingPackageName instead.')
-  Future<String?> getInstallerStore(String packageName);
 }
 
 /// Default no-op implementation to throw if no platform is registered.
@@ -320,10 +357,19 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
     bool onlyLaunchable = true,
     bool includeIcons = false,
     String? packageNamePrefix,
+    String? packageNameContains,
   }) => Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
   Future<AppInfo?> getApp(String packageName, {bool includeIcon = false}) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<List<AppInfo>> getApps(List<String> packageNames, {bool includeIcons = false}) =>
+      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
+
+  @override
+  Future<List<AppFramework>> detectAppFrameworks(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
@@ -368,11 +414,5 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
 
   @override
   Future<AppInstallSourceInfo?> getInstallSourceInfo(String packageName) =>
-      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
-
-  @override
-  // Newly deprecated; retain the method for backwards compatibility.
-  @Deprecated('Use getInstallSourceInfo() and its installingPackageName instead.')
-  Future<String?> getInstallerStore(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 }
