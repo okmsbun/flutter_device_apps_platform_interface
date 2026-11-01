@@ -221,13 +221,17 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
 
   /// Lists installed apps.
   ///
-  /// [packageNamePrefix] filters package names with a case-sensitive prefix
-  /// before loading app metadata and icons. Null or empty disables this filter.
+  /// [packageNamePrefix] matches the start of a package name, and
+  /// [packageNameContains] matches a substring anywhere in a package name.
+  /// Both filters are case-sensitive and run before loading app metadata and
+  /// icons. Null or empty disables each filter independently. When both are
+  /// provided, both must match.
   Future<List<AppInfo>> listApps({
     bool includeSystem = false,
     bool onlyLaunchable = true,
     bool includeIcons = false,
     String? packageNamePrefix,
+    String? packageNameContains,
   });
 
   /// Gets details for a single app.
@@ -300,14 +304,6 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// API 30, only installingPackageName is available. A returned model can have
   /// null fields when Android does not provide the corresponding information.
   Future<AppInstallSourceInfo?> getInstallSourceInfo(String packageName);
-
-  /// Gets the installer store for the specified package name.
-  ///
-  /// Platform implementations should return the installer store for the given package.
-  /// Returns the installer store name or null if not available.
-  // Newly deprecated; retain the method for backwards compatibility.
-  @Deprecated('Use getInstallSourceInfo() and its installingPackageName instead.')
-  Future<String?> getInstallerStore(String packageName);
 }
 
 /// Default no-op implementation to throw if no platform is registered.
@@ -320,6 +316,7 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
     bool onlyLaunchable = true,
     bool includeIcons = false,
     String? packageNamePrefix,
+    String? packageNameContains,
   }) => Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 
   @override
@@ -368,11 +365,5 @@ class _UnimplementedPlatform extends FlutterDeviceAppsPlatform {
 
   @override
   Future<AppInstallSourceInfo?> getInstallSourceInfo(String packageName) =>
-      Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
-
-  @override
-  // Newly deprecated; retain the method for backwards compatibility.
-  @Deprecated('Use getInstallSourceInfo() and its installingPackageName instead.')
-  Future<String?> getInstallerStore(String packageName) =>
       Future.error(UnsupportedError('FlutterDeviceAppsPlatform not implemented'));
 }
