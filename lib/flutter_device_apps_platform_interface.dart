@@ -4,7 +4,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'flutter_device_apps_app_change_event.dart';
 
-/// Framework or runtime families identified by known Android APK library names.
+/// Frameworks and runtime components identified by known Android APK entries.
 ///
 /// A match indicates a packaged component, not which technology renders every
 /// screen or whether that component is currently in use.
@@ -26,6 +26,24 @@ enum AppFramework {
 
   /// .NET Android runtime glue; does not distinguish MAUI from Xamarin.
   dotnetAndroid,
+
+  /// Jetpack Compose UI or runtime module metadata.
+  jetpackCompose,
+
+  /// Kotlin standard library metadata, which can come from a dependency.
+  kotlin,
+
+  /// AndroidX AppCompat library metadata.
+  androidxAppCompat,
+
+  /// Capacitor Android configuration asset.
+  capacitor,
+
+  /// Apache Cordova Android JavaScript runtime asset.
+  cordova,
+
+  /// Qt 5 or Qt 6 Core native library.
+  qt,
 }
 
 /// Information about an installed app on the device.
@@ -270,7 +288,7 @@ abstract class FlutterDeviceAppsPlatform extends PlatformInterface {
   /// Set [includeIcons] to load icons alongside app metadata (default: false).
   Future<List<AppInfo>> getApps(List<String> packageNames, {bool includeIcons = false});
 
-  /// Detects known framework library names in the base and installed split APKs.
+  /// Detects known framework and runtime entries in the base and split APKs.
   ///
   /// Returns unique matches in [AppFramework.values] order. An empty list means
   /// no supported indicator was found after all APKs were read successfully.
